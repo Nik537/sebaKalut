@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Flutter/Dart
+kalut_photoshop/build/
+kalut_photoshop/.dart_tool/
+kalut_photoshop/.packages
+kalut_photoshop/pubspec.lock
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# macOS Pods
+kalut_photoshop/macos/Pods/
+kalut_photoshop/macos/Podfile.lock
