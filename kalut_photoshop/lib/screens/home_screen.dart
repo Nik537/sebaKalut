@@ -29,27 +29,60 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
             )
-          : Row(
-              children: [
-                // Left side: Image preview
-                Expanded(
-                  flex: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: ImagePreview(
-                      image: state.processedImage ?? state.originalImage,
-                      isLoading: state.isLoading,
+          : LayoutBuilder(
+              builder: (context, constraints) {
+                // Use column layout for narrow screens, row for wide screens
+                final isWide = constraints.maxWidth > 800;
+                final controlsWidth = isWide
+                    ? (constraints.maxWidth * 0.35).clamp(320.0, 450.0)
+                    : constraints.maxWidth;
+
+                if (isWide) {
+                  // Wide layout: side by side
+                  return Row(
+                    children: [
+                      // Left side: Image preview
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: ImagePreview(
+                            image: state.processedImage ?? state.originalImage,
+                            isLoading: state.isLoading,
+                          ),
+                        ),
+                      ),
+                      // Right side: Controls
+                      SizedBox(
+                        width: controlsWidth,
+                        child: const SingleChildScrollView(
+                          child: ControlsPanel(),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  // Narrow layout: stacked vertically
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // Top: Image preview
+                        SizedBox(
+                          height: constraints.maxHeight * 0.5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: ImagePreview(
+                              image: state.processedImage ?? state.originalImage,
+                              isLoading: state.isLoading,
+                            ),
+                          ),
+                        ),
+                        // Bottom: Controls
+                        const ControlsPanel(),
+                      ],
                     ),
-                  ),
-                ),
-                // Right side: Controls
-                SizedBox(
-                  width: 400,
-                  child: SingleChildScrollView(
-                    child: ControlsPanel(),
-                  ),
-                ),
-              ],
+                  );
+                }
+              },
             ),
     );
   }

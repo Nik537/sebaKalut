@@ -163,32 +163,40 @@ class _ColorPickerWidgetState extends ConsumerState<ColorPickerWidget> {
         ),
         // Color picker dialog
         if (_showPicker)
-          Container(
-            margin: const EdgeInsets.only(top: 12),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey[300]!),
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                ColorPicker(
-                  pickerColor: state.tintColor,
-                  onColorChanged: notifier.setTintColor,
-                  pickerAreaHeightPercent: 0.7,
-                  enableAlpha: false,
-                  displayThumbColor: true,
-                  labelTypes: const [],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final pickerWidth = constraints.maxWidth.clamp(200.0, 300.0);
+              return Container(
+                margin: const EdgeInsets.only(top: 12),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[300]!),
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
                 ),
-                TextButton(
-                  onPressed: () {
-                    setState(() => _showPicker = false);
-                  },
-                  child: const Text('Done'),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: pickerWidth,
+                      child: HueRingPicker(
+                        pickerColor: state.tintColor,
+                        onColorChanged: notifier.setTintColor,
+                        enableAlpha: false,
+                        displayThumbColor: true,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextButton(
+                      onPressed: () {
+                        setState(() => _showPicker = false);
+                      },
+                      child: const Text('Done'),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
       ],
     );
